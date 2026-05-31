@@ -1,10 +1,20 @@
-﻿@page
-@model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+namespace MyModernWebApp.Pages
+{
+    public class IndexModel : PageModel
+    {
+        // 1. Make sure it returns IActionResult so it can handle redirects
+        public IActionResult OnGet()
+        {
+        if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
+            {
+                return RedirectToPage("/Login");
+            }
+
+            // If they ARE logged in, forward them straight to your real Monitor dashboard page safely!
+            return RedirectToPage("/Monitor");
+        }
+    }
+}

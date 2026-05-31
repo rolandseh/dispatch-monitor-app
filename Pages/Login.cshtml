@@ -1,11 +1,10 @@
 ﻿@page
 @model MyModernWebApp.Pages.LoginModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Dispatcher v1.0";
 }
 
 <div class="container mt-5" style="max-width: 400px;">
-    <h2>Login</h2>
     
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
@@ -13,14 +12,14 @@
     }
 
     <div class="text-center mb-4">
-        <img src="~/images/advent-law-corporation.png" alt="Company Logo" class="img-fluid" style="max-height: 80px;" />
-        <h3 class="mt-3">System Secure Login</h3>
+        <img src="~/images/advent-law-corporation.png" alt="Company Logo" class="img-fluid" style="width: 303px; height: 216px;" />
+        <h3 class="mt-3">Please enter your credentials</h3>
     </div>
 
     <form method="post">
         <div class="mb-3">
             <label class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" required />
+            <input type="text" name="Username" class="form-control" placeholder="Enter User ID" autocomplete="off" value="" required />
         </div>
         <div class="mb-3">
             <label class="form-label">Password</label>

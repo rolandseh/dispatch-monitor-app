@@ -18,7 +18,11 @@ namespace MyModernWebApp.Pages
 
         public void OnGet()
         {
-            // Leave open so users can always see the login screen
+            // Clear out the session data completely on load
+            HttpContext.Session.Clear();
+    
+            // Optional: If you want to be absolutely sure, remove the key specifically
+            HttpContext.Session.Remove("Username");
         }
 
         public IActionResult OnPost(string username, string password)
@@ -40,9 +44,26 @@ namespace MyModernWebApp.Pages
 
                         if (userExists > 0)
                         {
+
+                            string fullName = ""; 
+
+                            using (SqlConnection conn = new SqlConnection(connString))
+                            {
+                                // Fetch the actual display name for this specific username
+                                string query = "SELECT name FROM tbl_D_users WHERE username = @user";
+                                using (SqlCommand sqlCmd = new SqlCommand(query, conn))
+                                {
+                                    sqlCmd.Parameters.AddWithValue("@user", username);
+                                    conn.Open();
+                                    fullName = sqlCmd.ExecuteScalar()?.ToString() ?? username; // Fallback to username if blank
+                                }
+                            }
+
+
                             // 1. Set the session flags to lock the application down
                             HttpContext.Session.SetString("IsLoggedIn", "true");
                             HttpContext.Session.SetString("Username", username);
+                            HttpContext.Session.SetString("UserFullName", fullName);
 
                             // 2. Send them straight to the Monitor dashboard dashboard
                             return RedirectToPage("/Monitor"); 

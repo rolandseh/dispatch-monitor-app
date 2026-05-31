@@ -18,13 +18,10 @@ namespace MyModernWebApp.Pages
         public List<DispatchItem> CurrentDayDispatch { get; set; } = new List<DispatchItem>();
         public List<DispatchItem> OverdueDispatch { get; set; } = new List<DispatchItem>();
 
-        // CHANGED: Changed return type to IActionResult to handle the security redirect
         public IActionResult OnGet()
         {
-            // 1. Check if the user has an active, valid login session
-            var loginStatus = HttpContext.Session.GetString("IsLoggedIn");
-
-            if (string.IsNullOrEmpty(loginStatus) || loginStatus != "true")
+            // 1. Check if the user has an active, valid login session key
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
             {
                 // 2. Not logged in? Kick them back to the login screen immediately
                 return RedirectToPage("/Login");

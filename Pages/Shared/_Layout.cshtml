@@ -3,50 +3,62 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DispatcherFrontEnd</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Dispatch Management System</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/DispatcherFrontEnd.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">DispatcherFrontEnd</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-middle align-items-center gap-2 fw-bold" asp-page="/Index">
+                📦 <span>Dispatch System</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Monitor" ? "active fw-bold text-info" : "")" asp-page="/Monitor">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Settings" ? "active fw-bold text-info" : "")" asp-page="/Settings">Settings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/LetterGeneration" ? "active fw-bold text-info" : "")" asp-page="/LetterGeneration">Letter Tools</a>
+    </li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    @if (Context.Session.GetString("Username") != null)
+                    {
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="small" style="color: Orange;">👋 Hello, @Context.Session.GetString("UserFullName")</span>
+                            <a asp-page="/Login" class="btn btn-sm btn-outline-danger">Sign Out</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-page="/Login" class="btn btn-sm btn-outline-success">Sign In</a>
+                    }
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - DispatcherFrontEnd - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
