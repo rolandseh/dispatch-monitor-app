@@ -21,7 +21,7 @@ namespace MyModernWebApp.Pages
         public IActionResult OnGet()
         {
             // 1. Check if the user has an active, valid login session key
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
             {
                 // 2. Not logged in? Kick them back to the login screen immediately
                 return RedirectToPage("/Login");

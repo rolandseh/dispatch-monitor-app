@@ -34,7 +34,7 @@ namespace MyModernWebApp.Pages
 
         public IActionResult OnGet(string? editPostalId, string? editUsername)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
             {
                 return RedirectToPage("/Login");
             }
@@ -109,7 +109,7 @@ namespace MyModernWebApp.Pages
 
         public IActionResult OnPostAddUser()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username"))) return RedirectToPage("/Login");
+            if (User.Identity == null || !User.Identity.IsAuthenticated) return RedirectToPage("/Login");
             if (!ModelState.IsValid) return RedirectToPage();
 
             try
@@ -140,7 +140,7 @@ namespace MyModernWebApp.Pages
 
         public IActionResult OnPostDeleteUser(string username)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username"))) return RedirectToPage("/Login");
+            if (User.Identity == null || !User.Identity.IsAuthenticated) return RedirectToPage("/Login");
 
             using (SqlConnection conn = new SqlConnection(_connString))
             {
@@ -157,7 +157,7 @@ namespace MyModernWebApp.Pages
 
         public IActionResult OnPostUpdateUser()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username"))) return RedirectToPage("/Login");
+            if (User.Identity == null || !User.Identity.IsAuthenticated) return RedirectToPage("/Login");
 
             using (SqlConnection conn = new SqlConnection(_connString))
             {
@@ -192,7 +192,7 @@ namespace MyModernWebApp.Pages
 
         public IActionResult OnPostAddPostal()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username"))) return RedirectToPage("/Login");
+            if (User.Identity == null || !User.Identity.IsAuthenticated) return RedirectToPage("/Login");
 
             using (SqlConnection conn = new SqlConnection(_connString))
             {
@@ -212,7 +212,7 @@ namespace MyModernWebApp.Pages
 
         public IActionResult OnPostUpdatePostal()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username"))) return RedirectToPage("/Login");
+            if (User.Identity == null || !User.Identity.IsAuthenticated) return RedirectToPage("/Login");
 
             using (SqlConnection conn = new SqlConnection(_connString))
             {
@@ -233,7 +233,7 @@ namespace MyModernWebApp.Pages
 
         public IActionResult OnPostDeletePostal(int id)
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username"))) return RedirectToPage("/Login");
+            if (User.Identity == null || !User.Identity.IsAuthenticated) return RedirectToPage("/Login");
 
             using (SqlConnection conn = new SqlConnection(_connString))
             {
