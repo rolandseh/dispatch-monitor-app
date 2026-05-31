@@ -1,0 +1,159 @@
+﻿@page
+@model MyModernWebApp.Pages.SettingsModel
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="container mt-4">
+    <div class="p-3 mb-4 rounded d-flex gap-2" style="background-color: beige;">
+        <button class="btn btn-secondary shadow-sm" id="btn-user-panel" onclick="switchPanel('users')">User Management</button>
+        <button class="btn btn-secondary shadow-sm" id="btn-postal-panel" onclick="switchPanel('postal')">Postal Management</button>
+    </div>
+
+    <div id="panel-users" class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <h2 class="h4 text-dark mb-1">User Management</h2>
+            <hr class="mt-1 mb-4" />
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle border text-nowrap" style="max-width: 1100px;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 80px;">User ID</th>
+                            <th style="width: 300px;">Name</th>
+                            <th style="width: 150px;">Password</th>
+                            <th style="width: 100px;">Admin</th>
+                            <th style="width: 200px;">Device</th>
+                            <th style="width: 200px;">Enabled</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.UsersList.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-3">No data available.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var user in Model.UsersList)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-secondary">@user.Username</td>
+                                    <td>@user.Name</td>
+                                    <td class="text-muted">********</td>
+                                    <td>@(user.Admin ? "Yes" : "No")</td>
+                                    <td>@(string.IsNullOrEmpty(user.DeviceId) ? "-" : user.DeviceId)</td>
+                                    <td>@(user.Enabled ? "Yes" : "No")</td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary">Edit</button>
+                                            <form method="post" asp-page-handler="DeleteUser" asp-route-username="@user.Username" onsubmit="return confirm('Confirm deletion?');" class="d-inline">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        
+                        <tr style="background-color: orange;">
+                            <form method="post" asp-page-handler="AddUser">
+                                <td>
+                                    <input type="text" name="NewUser.Username" class="form-control form-control-sm" style="width: 70px;" required />
+                                </td>
+                                <td>
+                                    <input type="text" name="NewUser.Name" class="form-control form-control-sm" style="width: 290px;" required />
+                                </td>
+                                <td>
+                                    <input type="password" name="NewUser.Passwd" class="form-control form-control-sm" style="width: 140px;" required />
+                                </td>
+                                <td>
+                                    <select name="NewUser.Admin" class="form-select form-select-sm" style="width: 90px;">
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" name="NewUser.DeviceId" class="form-control form-control-sm" style="width: 190px;" />
+                                </td>
+                                <td>
+                                    <select name="NewUser.Enabled" class="form-select form-select-sm" style="width: 190px;">
+                                        <option value="false">No</option>
+                                        <option value="true" selected>Yes</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button type="submit" class="btn btn-sm btn-dark fw-bold">Add New</button>
+                                </td>
+                            </form>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-postal" class="card shadow-sm border-0 mb-4" style="display: none;">
+        <div class="card-body p-4">
+            <h2 class="h4 text-dark mb-1">Postal Code Management</h2>
+            <hr class="mt-1 mb-4" />
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle border text-nowrap" style="max-width: 1100px;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 50px;">id</th>
+                            <th style="width: 100px;">district</th>
+                            <th style="width: 100px;">sector</th>
+                            <th style="width: 700px;">location</th>
+                            <th class="text-center" style="width: 150px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.PostalList.Any())
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-3">No data available.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var post in Model.PostalList)
+                            {
+                                <tr>
+                                    <td>@post.Id</td>
+                                    <td>@post.District</td>
+                                    <td>@post.Sector</td>
+                                    <td class="text-wrap">@post.Location</td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-secondary">Edit</button>
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        <tr style="background-color: orange;">
+                            <td colspan="5" style="height: 15px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchPanel(panelName) {
+        if (panelName === 'users') {
+            document.getElementById('panel-users').style.display = 'block';
+            document.getElementById('panel-postal').style.display = 'none';
+        } else {
+            document.getElementById('panel-users').style.display = 'none';
+            document.getElementById('panel-postal').style.display = 'block';
+        }
+    }
+</script>
