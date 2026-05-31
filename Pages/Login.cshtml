@@ -9,8 +9,13 @@
     
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="alert alert-danger">@Model.ErrorMessage</div>
+        <div class="alert ale rt-danger">@Model.ErrorMessage</div>
     }
+
+    <div class="text-center mb-4">
+        <img src="~/images/advent-law-corporation.png" alt="Company Logo" class="img-fluid" style="max-height: 80px;" />
+        <h3 class="mt-3">System Secure Login</h3>
+    </div>
 
     <form method="post">
         <div class="mb-3">
