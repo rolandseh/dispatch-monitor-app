@@ -1,0 +1,52 @@
+﻿@page
+@model MyModernWebApp.Pages.LettersModel
+@{
+    ViewData["Title"] = "Letter Tools & Mail Merge";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-file-earmark-word-fill me-2"></i>Letter Tools & Excel Mail Merge</h5>
+                </div>
+                <div class="card-body p-4">
+                    
+                    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                    {
+                        <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <div>@Model.SuccessMessage</div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>@Model.ErrorMessage</div>
+                        </div>
+                    }
+
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label for="excelFile" class="form-label fw-bold text-secondary">Select Excel File (.xlsx)</label>
+                            <input class="form-control form-control-lg" type="file" id="excelFile" name="excelFile" accept=".xlsx" required>
+                            <div class="form-text mt-2">
+                                Uploading will automatically parse data rows, query relational tables for borrowers/guarantors, render barcodes, and output a ZIP file.
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold py-2">
+                                <i class="bi bi-gear-wide-connected me-2"></i>Process Import & Generate
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
