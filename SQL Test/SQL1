@@ -1,0 +1,37 @@
+select * from tblcase
+where dtLastUpdateDate >= '2026-06-18 00:00:00' and dtLastUpdateDate < '2026-06-19 00:00:00'
+and dtdateclosed is null and vchfilerefnumber = 'MBB-0136-03-2020';
+
+SELECT TOP 1 c.intCaseID,
+       c.vchFileRefNumber AS OurRef,
+       ip.intInvolvedPersonID as PersonID,
+       ip.vchInvolvedPersonLName As PersonName,
+       ip.vchInvolvedPersonNric As PersonNRIC,
+       ipaddr.vchInvolvedPersonAddr1 As Addr1,
+       ipaddr.vchInvolvedPersonAddr2 As Addr2,
+       ipaddr.vchInvolvedPersonAddr3 As Addr3,
+       ctip.intInvolvedPersonAccountID As InvolvedPersonAccountID,
+       ipacc.vchAccountNo As AccountNo,
+       ipacc.decLDAmt As LDAmt,
+       csi.vchCaseStatusType As CaseStatus
+FROM dbo.tblCase c
+INNER JOIN dbo.tblCaseToInvolvedPerson cip ON c.intcaseid = cip.intCaseID
+INNER JOIN dbo.tblInvolvedPerson ip ON ip.intInvolvedPersonID = cip.intInvolvedPersonID
+INNER JOIN dbo.tblInvolvedPersonAddr ipaddr on ipaddr.intInvolvedPersonID = ip.intInvolvedPersonID
+INNER JOIN dbo.tblCasetoIPAccount ctip ON ctip.intCaseID = c.intCaseID
+INNER JOIN dbo.tblInvolvedPersonAccount ipacc ON ipacc.intInvolvedPersonAccountID = ctip.intInvolvedPersonAccountID
+INNER JOIN dbo.tblCaseStatusInstance csi ON csi.intCaseID = c.intCaseID
+WHERE dtLastUpdateDate >= '2026-06-18 00:00:00' and dtLastUpdateDate < '2026-06-19 00:00:00'
+and dtdateclosed is null and c.vchFileRefNumber = 'MBB-0136-03-2020'
+ORDER BY csi.dtCSIUpdateDate DESC;
+
+select top 10 * from tblinvolvedpersonaccount
+where vchAccountNo = '04138683061'
+
+select top 10 * from tblCasetoIPAccount
+where intCaseID = '304224'
+
+select * from tblcasestatusinstance
+where intCaseID = '304224' order by dtCSIUpdateDate
+
+SELECT TOP 0 * FROM dbo.tblCasetoIPAccount;

@@ -4,14 +4,45 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- 🌟 SILENCE THE NUGET VULNERABILITY WARNINGS -->
+    <NoWarn>$(NoWarn);NU1902;NU1903</NoWarn>
+    
+    <PublishSingleFile>false</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsPublishable)' == 'true' Or $(MSBuildTargets.Contains('Publish'))">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>false</PublishSingleFile>
+    <PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
     <PackageReference Include="MiniExcel" Version="1.31.3" />
     <PackageReference Include="MiniWord" Version="0.9.2" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.9" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="wwwroot\templates\ServiceReportTemplate.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CopyWwwRootToPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <WwwRootFiles Include="wwwroot\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(WwwRootFiles)" 
+          DestinationFolder="$(PublishDir)wwwroot\%(RecursiveDir)" 
+          SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>

@@ -1,0 +1,46 @@
+@page
+@model MyModernWebApp.Pages.ALODModel
+@{
+    ViewData["Title"] = "Automated LOD/ALOD Generator";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm" style="max-width: 600px; margin: 0 auto;">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Automated ALOD / LOD Batch Processing</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted">Select Client to batch-generate demand letters using today's date.</p>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+
+            <form method="post" asp-page-handler="Generate">
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold">Select Client Bank</label>
+                    <select asp-for="SelectedBank" class="form-select form-control-lg">
+                        <option value="">-- Choose Bank Prefix --</option>
+                        @foreach (var bank in Model.BankOptions)
+                        {
+                            <option value="@bank">@bank</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label font-weight-bold">Filter Case Status</label>
+                    <select asp-for="SelectedStatus" class="form-select">
+                        <option value="LOD">LOD</option>
+                        <option value="ALOD">ALOD</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    ⚙️ Scan Database & Download Letters in ZIP
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

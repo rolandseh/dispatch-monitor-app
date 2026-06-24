@@ -27,7 +27,8 @@ namespace MyModernWebApp.Pages
 
         public void OnGet()
         {
-            // Old Session.Clear() code removed entirely to stop crashes
+            // Resets state variables to prevent stuck validation popups on a fresh visit
+            ErrorMessage = string.Empty;
         }
 
         public async Task<IActionResult> OnPostAsync(string username, string password)

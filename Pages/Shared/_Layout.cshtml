@@ -6,55 +6,95 @@
     <title>@ViewData["Title"] - Dispatch Management System</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    
+    <style>
+        /* Smooth subtle transitions for navigation links */
+        .nav-link {
+            transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem !important;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f8f9fa !important;
+        }
+        /* Custom layout adjustments */
+        body {
+            background-color: #f4f6f9 !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body class="d-flex flex-column min-vh-out">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-3 mb-4" style="background-color: #1a1e22 !important;">
         <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-middle align-items-center gap-2 fw-bold" asp-page="/Monitor">
-                📦 <span>Dispatch System</span>
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-uppercase tracking-wider fs-5" asp-page="/Monitor">
+                <i class="bi bi-box-seam text-info"></i>
+                <span class="text-white">Dispatch<span class="text-info">System</span></span>
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 mt-2 mt-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Monitor" ? "active fw-bold text-info" : "")" asp-page="/Monitor">Dashboard</a>
+                        <a class="nav-link d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["page"]?.ToString() == "/Monitor" ? "active bg-info bg-opacity-10 text-info fw-semibold" : "text-secondary")" asp-page="/Monitor">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Settings" ? "active fw-bold text-info" : "")" asp-page="/Settings">Settings</a>
+                        <a class="nav-link d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["page"]?.ToString() == "/Settings" ? "active bg-info bg-opacity-10 text-info fw-semibold" : "text-secondary")" asp-page="/Settings">
+                            <i class="bi bi-gear"></i> Settings
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/LetterGeneration" ? "active fw-bold text-info" : "")" asp-page="/Letters">Letter Tools</a>
+                        <a class="nav-link d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["page"]?.ToString() == "/Letters" ? "active bg-info bg-opacity-10 text-info fw-semibold" : "text-secondary")" asp-page="/Letters">
+                            <i class="bi bi-envelope-paper"></i> Letter Tools
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["page"]?.ToString() == "/ALOD" ? "active bg-info bg-opacity-10 text-info fw-semibold" : "text-secondary")" asp-page="/ALOD">
+                            <i class="bi bi-shield-check"></i> ALOD/LOD Module
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2 @(ViewContext.RouteData.Values["page"]?.ToString() == "/ServiceReports" ? "active bg-info bg-opacity-10 text-info fw-semibold" : "text-secondary")" asp-page="/ServiceReports">
+                            <i class="bi bi-file-earmark-bar-graph"></i> Service Reports
+                        </a>
                     </li>
                 </ul>
 
-                <div class="d-flex align-items-center">
-                    @* Modern Identity Engine check replacing the old broken Context.Session parameters *@
+                <div class="d-flex align-items-center mt-3 mt-lg-0">
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        <div class="d-flex align-items-center gap-3">
-                            @* Pulls the user name identity property straight from the browser's encrypted token *@
-                            <span class="small" style="color: Orange;">👋 Hello, @User.Identity.Name</span>
-                            @* Connected directly to your Login's OnGetLogout clear routine handler *@
-                            <a asp-page="/Login" asp-page-handler="Logout" class="btn btn-sm btn-outline-danger">Sign Out</a>
+                        <div class="d-flex align-items-center gap-3 bg-secondary bg-opacity-10 px-3 py-1.5 rounded-pill border border-secondary border-opacity-20">
+                            <span class="small fw-medium text-light d-flex align-items-center gap-1.5">
+                                <span class="badge bg-success-subtle border border-success-subtle rounded-circle p-1 me-1"><span class="visually-hidden">Online</span></span>
+                                <span class="text-secondary">User:</span> <span class="text-info fw-semibold">@User.Identity.Name</span>
+                            </span>
+                            <div class="vr text-secondary opacity-20" style="height: 16px;"></div>
+                            <a asp-page="/Login" asp-page-handler="Logout" class="btn btn-sm btn-link text-danger text-decoration-none fw-semibold p-0 hover-opacity">
+                                <i class="bi bi-box-arrow-right"></i> Sign Out
+                            </a>
                         </div>
                     }
                     else
                     {
-                        <a asp-page="/Login" class="btn btn-sm btn-outline-success">Sign In</a>
+                        <a asp-page="/Login" class="btn btn-sm btn-info text-dark fw-semibold px-3 rounded-pill shadow-sm">
+                            <i class="bi bi-box-arrow-in-right"></i> Sign In
+                        </a>
                     }
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="container-fluid px-4">
-        <main role="main" class="pb-3">
+    <div class="container-fluid px-4 flex-grow-1">
+        <main role="main" class="pb-5">
             @RenderBody()
         </main>
     </div>

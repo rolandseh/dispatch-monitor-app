@@ -1,7 +1,23 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Core Services Setup
-builder.Services.AddRazorPages();
+// 1. Core Services Setup with GLOBAL SECURITY POLICY 🌟
+builder.Services.AddRazorPages(options =>
+{
+    // Exclude your Login and Error pages so users can actually reach them anonymously
+    options.Conventions.AllowAnonymousToPage("/Login");
+    options.Conventions.AllowAnonymousToPage("/Error");
+})
+.AddMvcOptions(options =>
+{
+    // 🌟 This is where the Filters collection actually lives!
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
 
 // 2. Bulletproof Browser-Side Secure Cookie Authentication
 builder.Services.AddAuthentication("FirmAuthCookie")

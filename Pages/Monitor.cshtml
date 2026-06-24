@@ -4,74 +4,169 @@
     ViewData["Title"] = "Dispatch Monitor";
 }
 
-<div class="container-fluid mt-4">
-    <div class="row">
-        <div class="col-md-6">
-            <h4 class="p-2 text-center" style="background-color: #e9ecef;">Current Day Dispatch</h4>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-sm font-monospace">
-                    <thead class="table-primary text-white">
-                        <tr>
-                            <th>Case Ref Number</th>
-                            <th>Debtor's Name</th>
-                            <th>Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.CurrentDayDispatch != null && Model.CurrentDayDispatch.Any())
-                        {
-                            @foreach (var row in Model.CurrentDayDispatch)
-                            {
+<div class="container-fluid py-4 animate-fade-in">
+    
+    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="h3 mb-1 fw-bold text-dark">Live Dispatch Hub</h2>
+            <p class="text-secondary small mb-0">Monitor operational dispatch tracks, backlogs, and real-time client statuses.</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill shadow-sm small fw-semibold">
+                <i class="bi bi-clock-history text-info me-1"></i> Auto-refreshing
+            </span>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
+                <div class="card-header bg-white border-0 py-3 d-flex align-items-center justify-content-between border-start border-4 border-info">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="bg-info bg-opacity-10 p-2 rounded text-info">
+                            <i class="bi bi-calendar-check-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0 fw-bold text-dark">Current Day Dispatch</h5>
+                            <span class="text-muted small">Assigned for processing today</span>
+                        </div>
+                    </div>
+                    <span class="badge bg-info bg-opacity-10 text-info px-2.5 py-1.5 rounded-pill fw-semibold">
+                        @(Model.CurrentDayDispatch?.Count ?? 0) Active
+                    </span>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0 table-hover">
+                            <thead class="bg-light table-light border-bottom text-uppercase text-secondary small" style="font-size: 0.75rem; tracking: 0.05em;">
                                 <tr>
-                                    <td>@row.CaseRefNo</td>
-                                    <td>@row.DebtorName</td>
-                                    <td>@row.DebtorAddr</td>
+                                    <th class="ps-4 py-3">Case Ref Number</th>
+                                    <th class="py-3">Debtor Details</th>
+                                    <th class="pe-4 py-3 text-end">Action</th>
                                 </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="3" class="text-center text-muted">No dispatches for today.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                @if (Model.CurrentDayDispatch != null && Model.CurrentDayDispatch.Any())
+                                {
+                                    @foreach (var row in Model.CurrentDayDispatch)
+                                    {
+                                        <tr class="transition-row">
+                                            <td class="ps-4 py-3 font-monospace fw-semibold text-info" style="font-size: 0.9rem;">
+                                                @row.CaseRefNo
+                                            </td>
+                                            <td class="py-3">
+                                                <div class="fw-bold text-dark mb-0.5" style="font-size: 0.95rem;">@row.DebtorName</div>
+                                                <div class="text-secondary small d-flex align-items-center gap-1">
+                                                    <i class="bi bi-geo-alt-fill text-muted" style="font-size: 0.85rem;"></i>
+                                                    <span class="text-truncate" style="max-width: 280px;">@row.DebtorAddr</span>
+                                                </div>
+                                            </td>
+                                            <td class="pe-4 py-3 text-end">
+                                                <a asp-page="/ServiceReports" asp-route-refNum="@row.CaseRefNo" class="btn btn-sm btn-light border rounded-pill px-3 fw-medium hover-btn shadow-sm">
+                                                    Open <i class="bi bi-arrow-right-short"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-5">
+                                            <i class="bi bi-cloud-check display-6 text-opacity-25 text-secondary d-block mb-2"></i>
+                                            <span class="small fw-medium">All clear! No dispatches listed for today.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <h4 class="p-2 text-center" style="background-color: #e9ecef;">Overdue Dispatch</h4>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-sm font-monospace">
-                    <thead class="table-primary text-white">
-                        <tr>
-                            <th>Case Ref Number</th>
-                            <th>Debtor's Name</th>
-                            <th>Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.OverdueDispatch != null && Model.OverdueDispatch.Any())
-                        {
-                            @foreach (var row in Model.OverdueDispatch)
-                            {
+        <div class="col-xl-6">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
+                <div class="card-header bg-white border-0 py-3 d-flex align-items-center justify-content-between border-start border-4 border-danger">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="bg-danger bg-opacity-10 p-2 rounded text-danger">
+                            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-0 fw-bold text-dark">Overdue Dispatch</h5>
+                            <span class="text-muted small">Pending immediate action</span>
+                        </div>
+                    </div>
+                    <span class="badge bg-danger text-white px-2.5 py-1.5 rounded-pill fw-semibold">
+                        @(Model.OverdueDispatch?.Count ?? 0) Backlog
+                    </span>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0 table-hover">
+                            <thead class="bg-light table-light border-bottom text-uppercase text-secondary small" style="font-size: 0.75rem; tracking: 0.05em;">
                                 <tr>
-                                    <td>@row.CaseRefNo</td>
-                                    <td>@row.DebtorName</td>
-                                    <td>@row.DebtorAddr</td>
+                                    <th class="ps-4 py-3">Case Ref Number</th>
+                                    <th class="py-3">Debtor Details</th>
+                                    <th class="pe-4 py-3 text-end">Action</th>
                                 </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="3" class="text-center text-muted">No overdue dispatches.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                @if (Model.OverdueDispatch != null && Model.OverdueDispatch.Any())
+                                {
+                                    @foreach (var row in Model.OverdueDispatch)
+                                    {
+                                        <tr class="transition-row">
+                                            <td class="ps-4 py-3 font-monospace fw-semibold text-danger" style="font-size: 0.9rem;">
+                                                @row.CaseRefNo
+                                            </td>
+                                            <td class="py-3">
+                                                <div class="fw-bold text-dark mb-0.5" style="font-size: 0.95rem;">@row.DebtorName</div>
+                                                <div class="text-secondary small d-flex align-items-center gap-1">
+                                                    <i class="bi bi-geo-alt-fill text-muted" style="font-size: 0.85rem;"></i>
+                                                    <span class="text-truncate" style="max-width: 280px;">@row.DebtorAddr</span>
+                                                </div>
+                                            </td>
+                                            <td class="pe-4 py-3 text-end">
+                                                <a asp-page="/ServiceReports" asp-route-refNum="@row.CaseRefNo" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-medium hover-btn shadow-sm">
+                                                    Process <i class="bi bi-lightning-charge-fill ms-0.5"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-5">
+                                            <i class="bi bi-check-circle-fill display-6 text-success text-opacity-25 d-block mb-2"></i>
+                                            <span class="small fw-medium text-success">Perfect! No overdue backlogs.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Add smooth fade and layout micro-interactions to your style block */
+    .transition-row {
+        transition: background-color 0.15s ease-in-out;
+    }
+    .transition-row:hover {
+        background-color: rgba(244, 246, 249, 0.7) !important;
+    }
+    .hover-btn {
+        transition: transform 0.1s ease, background-color 0.2s ease;
+    }
+    .hover-btn:hover {
+        transform: translateY(-1px);
+    }
+</style>
